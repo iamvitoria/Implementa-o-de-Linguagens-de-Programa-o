@@ -1,0 +1,9 @@
+{
+    "python.pythonPath": "<path_to_your_python_environment>",
+    "python.testing.unittestEnabled": true,
+    "python.testing.pytestEnabled": true,
+    "python.analysis.extraPaths": ["./src"],
+    "files.exclude": {
+        "**/*.pyc": true
+    }
+}
