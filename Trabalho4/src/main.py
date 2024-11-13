@@ -31,10 +31,10 @@ class EvalVisitor(ParseTreeVisitor):
         return left
 
     def visitFactor(self, ctx):
-        print(f"Visiting factor: {ctx.getText()}")  # Debugging line
+        print(f"Visiting factor: {ctx.getText()}")  # Linha de depuração
         if ctx.INT():
             return int(ctx.INT().getText())
-        elif ctx.LPAREN():  # For expressions in parentheses
+        elif ctx.expression():  # Verifica a expressão dentro de parênteses
             return self.visit(ctx.expression())
         else:
             raise Exception(f"Unrecognized factor: {ctx.getText()}")

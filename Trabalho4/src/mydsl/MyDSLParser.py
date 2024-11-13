@@ -12,12 +12,12 @@ def serializedATN():
     return [
         4,1,8,30,2,0,7,0,2,1,7,1,2,2,7,2,1,0,1,0,1,0,5,0,10,8,0,10,0,12,
         0,13,9,0,1,1,1,1,1,1,5,1,18,8,1,10,1,12,1,21,9,1,1,2,1,2,1,2,1,2,
-        1,2,3,2,28,8,2,1,2,0,0,3,0,2,4,0,2,1,0,7,8,1,0,1,2,29,0,6,1,0,0,
+        1,2,3,2,28,8,2,1,2,0,0,3,0,2,4,0,2,1,0,1,2,1,0,3,4,29,0,6,1,0,0,
         0,2,14,1,0,0,0,4,27,1,0,0,0,6,11,3,2,1,0,7,8,7,0,0,0,8,10,3,2,1,
         0,9,7,1,0,0,0,10,13,1,0,0,0,11,9,1,0,0,0,11,12,1,0,0,0,12,1,1,0,
         0,0,13,11,1,0,0,0,14,19,3,4,2,0,15,16,7,1,0,0,16,18,3,4,2,0,17,15,
         1,0,0,0,18,21,1,0,0,0,19,17,1,0,0,0,19,20,1,0,0,0,20,3,1,0,0,0,21,
-        19,1,0,0,0,22,28,5,5,0,0,23,24,5,3,0,0,24,25,3,0,0,0,25,26,5,4,0,
+        19,1,0,0,0,22,28,5,7,0,0,23,24,5,5,0,0,24,25,3,0,0,0,25,26,5,6,0,
         0,26,28,1,0,0,0,27,22,1,0,0,0,27,23,1,0,0,0,28,5,1,0,0,0,3,11,19,
         27
     ]
@@ -32,10 +32,10 @@ class MyDSLParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'*'", "'/'", "'('", "')'" ]
+    literalNames = [ "<INVALID>", "'+'", "'-'", "'*'", "'/'", "'('", "')'" ]
 
-    symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "INT", "WS", "PLUS", "MINUS" ]
+    symbolicNames = [ "<INVALID>", "PLUS", "MINUS", "MUL", "DIV", "LPAREN", 
+                      "RPAREN", "INT", "WS" ]
 
     RULE_expression = 0
     RULE_term = 1
@@ -44,14 +44,14 @@ class MyDSLParser ( Parser ):
     ruleNames =  [ "expression", "term", "factor" ]
 
     EOF = Token.EOF
-    T__0=1
-    T__1=2
-    T__2=3
-    T__3=4
-    INT=5
-    WS=6
-    PLUS=7
-    MINUS=8
+    PLUS=1
+    MINUS=2
+    MUL=3
+    DIV=4
+    LPAREN=5
+    RPAREN=6
+    INT=7
+    WS=8
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -120,10 +120,10 @@ class MyDSLParser ( Parser ):
             self.state = 11
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==7 or _la==8:
+            while _la==1 or _la==2:
                 self.state = 7
                 _la = self._input.LA(1)
-                if not(_la==7 or _la==8):
+                if not(_la==1 or _la==2):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -157,6 +157,18 @@ class MyDSLParser ( Parser ):
                 return self.getTypedRuleContext(MyDSLParser.FactorContext,i)
 
 
+        def MUL(self, i:int=None):
+            if i is None:
+                return self.getTokens(MyDSLParser.MUL)
+            else:
+                return self.getToken(MyDSLParser.MUL, i)
+
+        def DIV(self, i:int=None):
+            if i is None:
+                return self.getTokens(MyDSLParser.DIV)
+            else:
+                return self.getToken(MyDSLParser.DIV, i)
+
         def getRuleIndex(self):
             return MyDSLParser.RULE_term
 
@@ -189,10 +201,10 @@ class MyDSLParser ( Parser ):
             self.state = 19
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==1 or _la==2:
+            while _la==3 or _la==4:
                 self.state = 15
                 _la = self._input.LA(1)
-                if not(_la==1 or _la==2):
+                if not(_la==3 or _la==4):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -222,9 +234,15 @@ class MyDSLParser ( Parser ):
         def INT(self):
             return self.getToken(MyDSLParser.INT, 0)
 
+        def LPAREN(self):
+            return self.getToken(MyDSLParser.LPAREN, 0)
+
         def expression(self):
             return self.getTypedRuleContext(MyDSLParser.ExpressionContext,0)
 
+
+        def RPAREN(self):
+            return self.getToken(MyDSLParser.RPAREN, 0)
 
         def getRuleIndex(self):
             return MyDSLParser.RULE_factor
@@ -254,19 +272,19 @@ class MyDSLParser ( Parser ):
             self.state = 27
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [5]:
+            if token in [7]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 22
                 self.match(MyDSLParser.INT)
                 pass
-            elif token in [3]:
+            elif token in [5]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 23
-                self.match(MyDSLParser.T__2)
+                self.match(MyDSLParser.LPAREN)
                 self.state = 24
                 self.expression()
                 self.state = 25
-                self.match(MyDSLParser.T__3)
+                self.match(MyDSLParser.RPAREN)
                 pass
             else:
                 raise NoViableAltException(self)
